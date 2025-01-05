@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zkubernetes
+spec:
+  selector:
+    matchLabels:
+      app: zkubernetes
+  replicas: 2 #2 instances will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: zkubernetes
+    spec:
+      containers:
+        - name: zkubernetes
+          image: zkubernetes:0.0.1-SNAPSHOT
+          imagePullPolicy: IfNotPresent # Will only pull from docker hub if image is not present locally
+          ports:
+            - containerPort: 8080
