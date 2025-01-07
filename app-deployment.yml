@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zkubernetes
+spec:
+  selector:
+    matchLabels:
+      app: zkubernetes
+  replicas: 2 #2 instances will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: zkubernetes
+    spec:
+      containers:
+        - name: zkubernetes
+          image: zkubernetes:1.0.0
+          imagePullPolicy: IfNotPresent # Will only pull from docker hub if image is not present locally
+          ports:
+            - containerPort: 8080
+          env:   # Setting Enviornmental Variables
+            - name: DB_HOST   # Setting Database host address from configMap
+              valueFrom :
+                configMapKeyRef :
+                  name : db-config
+                  key :  host
+
+            - name: DB_NAME  # Setting Database name from configMap
+              valueFrom :
+                configMapKeyRef :
+                  name : db-config
+                  key :  dbName
+
+            - name: DB_USERNAME  # Setting Database username from Secret
+              valueFrom :
+                secretKeyRef :
+                  name : mysql-secrets
+                  key :  username
+
+            - name: DB_PASSWORD # Setting Database password from Secret
+              valueFrom :
+                secretKeyRef :
+                  name : mysql-secrets
+                  key :  password

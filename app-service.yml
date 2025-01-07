@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zkubernetes-crud-svc
+spec:
+  selector:
+    app: zkubernetes
+  ports:
+    - protocol: "TCP"
+      port: 50000 # The port that the service is running on in the cluster
+      targetPort: 50000 # The port exposed by the service
+  type: NodePort
